@@ -4,6 +4,7 @@ use lib "/opt/isg";
 use DBI;
 use DBD::Oracle;
 
+use Fcntl 'LOCK_EX', 'LOCK_NB';
 use strict;
 use POSIX qw/strftime/;
 
@@ -11,17 +12,16 @@ use shared;
 require "config.pl";
 $config::app_log = '/opt/isg/log/isg.log';
 
-# Check if another copy is running
-my $p = `ps ax | grep -v grep | grep -v '<defunct>' | grep -v vim | grep isg.pl | wc -l`;
-if ($p != 1) {
-    print "AMOUNT OF PROCESSES: ", $p;
-    print "EXIT\n";
-    print strftime('%Y-%m-%d %H:%M:%S',localtime);    
-    exit;
-}
-
 # MAIN
 _log("ISG::STARTED\n");
+
+# Check if another copy is running
+unless ( flock DATA, LOCK_EX | LOCK_NB ) {
+    print STDERR "Found duplicate script run. Stopping\n";
+    _log("Found duplicate script run. Stopping\n");
+    exit(0);
+}
+
 $ENV{'NLS_LANG'} = 'RUSSIAN_CIS.UTF8'; 
 my $uri = "dbi:$config::db_platform:$config::db_addr/$config::db_name";
 my $dbh = DBI->connect($uri, $config::db_user, $config::db_pass) || die("Database connection not made: $DBI::errstr");
@@ -88,3 +88,8 @@ if (defined $sth) {$sth->finish;}
 $dbh->disconnect;
 _log("ISG::STOPPED");
 
+### DO NOT REMOVE THE FOLLOWING LINES ###
+
+__DATA__
+This exists to allow the locking code at the beginning of the file to work.
+DO NOT REMOVE THESE LINES!
