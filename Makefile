@@ -33,4 +33,12 @@ install-log: isg.logrotate
 	$(INSTALL_DIR) $(DESTDIR)$(logdir)
 	$(INSTALL_DATA) isg.logrotate $(logrotate)/isg
 
-install: install-lib install-bin install-log install-config	
+install: install-lib install-bin install-log install-config
+	@echo "";
+	@echo "";
+	@echo "**************************************************************************";
+	@echo "";
+	@echo " Don't foget to add to crontab";
+	@echo " 00,10,20,30,40,50 * * * * $(bindir)/./isg.pl 2>> $(logdir)/isg-error.log ";
+	@echo "";
+	@echo "**************************************************************************";
