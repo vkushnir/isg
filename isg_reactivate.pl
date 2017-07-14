@@ -32,14 +32,11 @@ eval {
 			
 			$service =~ s/group/SVC/g;
 			my $service_sky = "SVC_SKY";
-			my $service_kz = "SVC_KZ";		
 			
 			cmd("deactivate-service", $bras, $user, $session, $service);
-			cmd("deactivate-service", $bras, $user, $session, $service_kz);
 			cmd("deactivate-service", $bras, $user, $session, $service_sky);
 			
 			cmd("activate-service", $bras, $user, $session, $service);
-			cmd("activate-service", $bras, $user, $session, $service_kz);
 			cmd("activate-service", $bras, $user, $session, $service_sky);			
 			
 		};

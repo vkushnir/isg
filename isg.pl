@@ -47,7 +47,6 @@ eval {
 		  my $reason = $data[8];
 		  my $bras = $data[9];
 		  my $service_sky = "SVC_SKY";
-		  my $service_kz = "SVC_KZ";					
 		  my $speed = $data[4];
 			 $speed =~ s/group_//g;
 		  if (!$speed) { $speed = 0; };
@@ -68,11 +67,9 @@ eval {
 				$service =~ s/group/SVC/g;		
 				# Deactivate active service
 				cmd("deactivate-service", $bras, $user, $session, $service);
-				cmd("deactivate-service", $bras, $user, $session, $service_kz);
 				cmd("deactivate-service", $bras, $user, $session, $service_sky);
 		
 				cmd("activate-service", $bras, $user, $session, $new_service);
-				cmd("activate-service", $bras, $user, $session, $service_kz);
 				cmd("activate-service", $bras, $user, $session, $service_sky);			
 			};
 		};
