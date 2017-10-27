@@ -1,7 +1,0 @@
-/opt/isg/log/isg*.log
-{
-    missingok
-    dateext
-    daily
-    rotate 14
-}
